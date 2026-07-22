@@ -3,12 +3,15 @@ from __future__ import annotations
 import base64
 from datetime import datetime
 import hashlib
+import logging
 import secrets
 from typing import Any
 from zoneinfo import ZoneInfo
 
 from app.core.supabase_client import get_supabase
 from app.schemes.user_schema import UserCreate, UserPublic, UserUpdate
+
+logger = logging.getLogger(__name__)
 
 
 class UserServiceError(Exception):
@@ -64,6 +67,7 @@ def user_create(user: UserCreate) -> UserPublic:
     except DuplicateEmailError:
         raise
     except Exception as exc:
+        logger.exception("user_create failed for email=%s", user.email)
         raise UserServiceError from exc
 
 
@@ -72,6 +76,7 @@ def user_get_all() -> list[UserPublic]:
         result = get_supabase().table("users").select("user_id,email,name,created_at,updated_at").execute()
         return [_to_public(row) for row in result.data]
     except Exception as exc:
+        logger.exception("user_get_all failed")
         raise UserServiceError from exc
 
 
@@ -86,6 +91,7 @@ def user_get(user_id: str) -> UserPublic | None:
         )
         return _to_public(result.data[0]) if result.data else None
     except Exception as exc:
+        logger.exception("user_get failed for user_id=%s", user_id)
         raise UserServiceError from exc
 
 
@@ -112,6 +118,7 @@ def user_update(user_id: str, user: UserUpdate) -> UserPublic | None:
     except (DuplicateEmailError, UserServiceError):
         raise
     except Exception as exc:
+        logger.exception("user_update failed for user_id=%s", user_id)
         raise UserServiceError from exc
 
 
@@ -126,4 +133,5 @@ def user_delete(user_id: str) -> UserPublic | None:
         )
         return _to_public(result.data[0]) if result.data else None
     except Exception as exc:
+        logger.exception("user_delete failed for user_id=%s", user_id)
         raise UserServiceError from exc

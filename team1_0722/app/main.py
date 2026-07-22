@@ -1,9 +1,13 @@
+import logging
+
 from fastapi import FastAPI
 from app.routers.chat_router import chat_router
 from app.routers.post_router import post_router
 from app.routers.user_router import user_router
 #from app.routers.product_router import product_router
 import app.core.chat_config
+
+logging.basicConfig(level=logging.INFO)
 
 
 tags_metadata = [

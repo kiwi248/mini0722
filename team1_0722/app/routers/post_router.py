@@ -53,12 +53,18 @@ def create(post: PostCreate) -> PostResponse:
 
 @post_router.get("", response_model=list[PostResponse])
 def get_all() -> list[PostResponse]:
-    return get_posts()
+    try:
+        return get_posts()
+    except PostDatabaseError as exc:
+        raise HTTPException(status_code=500, detail="게시글 목록을 조회하는 중 오류가 발생했습니다.") from exc
 
 
 @post_router.get("/{post_id}", response_model=PostResponse)
 def get_one(post_id: int) -> PostResponse:
-    post = get_post(post_id)
+    try:
+        post = get_post(post_id)
+    except PostDatabaseError as exc:
+        raise HTTPException(status_code=500, detail="게시글을 조회하는 중 오류가 발생했습니다.") from exc
     if post is None:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return post
@@ -66,7 +72,10 @@ def get_one(post_id: int) -> PostResponse:
 
 @post_router.put("/{post_id}", response_model=PostResponse)
 def update(post_id: int, post: PostUpdate) -> PostResponse:
-    updated_post = update_post(post_id, post)
+    try:
+        updated_post = update_post(post_id, post)
+    except PostDatabaseError as exc:
+        raise HTTPException(status_code=500, detail="게시글을 수정하는 중 오류가 발생했습니다.") from exc
     if updated_post is None:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return updated_post
@@ -74,7 +83,10 @@ def update(post_id: int, post: PostUpdate) -> PostResponse:
 
 @post_router.delete("/{post_id}", response_model=PostDeleteResponse)
 def delete(post_id: int) -> PostDeleteResponse:
-    deleted_post = delete_post(post_id)
+    try:
+        deleted_post = delete_post(post_id)
+    except PostDatabaseError as exc:
+        raise HTTPException(status_code=500, detail="게시글을 삭제하는 중 오류가 발생했습니다.") from exc
     if deleted_post is None:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return PostDeleteResponse(message="게시글이 삭제되었습니다.", post_id=post_id)

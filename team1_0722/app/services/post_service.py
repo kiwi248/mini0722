@@ -6,11 +6,14 @@
     pytest tests/test_post_router.py -v
 """
 
+import logging
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from app.core.supabase_client import get_supabase
 from app.schemes.post_scheme import PostCreate, PostResponse, PostUpdate
+
+logger = logging.getLogger(__name__)
 
 
 class PostAuthorNotFoundError(Exception):
@@ -37,6 +40,7 @@ def create_post(post: PostCreate) -> PostResponse | None:
     except PostAuthorNotFoundError:
         raise
     except Exception as exc:
+        logger.exception("create_post failed for user_id=%s", post.user_id)
         raise PostDatabaseError("게시글 생성 중 데이터베이스 오류가 발생했습니다.") from exc
 
     if not result.data:
@@ -45,53 +49,69 @@ def create_post(post: PostCreate) -> PostResponse | None:
 
 
 def get_posts() -> list[PostResponse]:
-    result = (
-        get_supabase()
-        .table("posts")
-        .select("*")
-        .order("post_id", desc=True)
-        .execute()
-    )
-    return [PostResponse.model_validate(item) for item in result.data]
+    try:
+        result = (
+            get_supabase()
+            .table("posts")
+            .select("*")
+            .order("post_id", desc=True)
+            .execute()
+        )
+        return [PostResponse.model_validate(item) for item in result.data]
+    except Exception as exc:
+        logger.exception("get_posts failed")
+        raise PostDatabaseError("게시글 목록 조회 중 데이터베이스 오류가 발생했습니다.") from exc
 
 
 def get_post(post_id: int) -> PostResponse | None:
-    result = (
-        get_supabase()
-        .table("posts")
-        .select("*")
-        .eq("post_id", post_id)
-        .execute()
-    )
-    if not result.data:
-        return None
-    return PostResponse.model_validate(result.data[0])
+    try:
+        result = (
+            get_supabase()
+            .table("posts")
+            .select("*")
+            .eq("post_id", post_id)
+            .execute()
+        )
+        if not result.data:
+            return None
+        return PostResponse.model_validate(result.data[0])
+    except Exception as exc:
+        logger.exception("get_post failed for post_id=%s", post_id)
+        raise PostDatabaseError("게시글 조회 중 데이터베이스 오류가 발생했습니다.") from exc
 
 
 def update_post(post_id: int, post: PostUpdate) -> PostResponse | None:
-    update_data = post.model_dump()
-    update_data["updated_at"] = datetime.now(ZoneInfo("Asia/Seoul")).isoformat()
+    try:
+        update_data = post.model_dump()
+        update_data["updated_at"] = datetime.now(ZoneInfo("Asia/Seoul")).isoformat()
 
-    result = (
-        get_supabase()
-        .table("posts")
-        .update(update_data)
-        .eq("post_id", post_id)
-        .execute()
-    )
-    if not result.data:
-        return None
-    return PostResponse.model_validate(result.data[0])
+        result = (
+            get_supabase()
+            .table("posts")
+            .update(update_data)
+            .eq("post_id", post_id)
+            .execute()
+        )
+        if not result.data:
+            return None
+        return PostResponse.model_validate(result.data[0])
+    except Exception as exc:
+        logger.exception("update_post failed for post_id=%s", post_id)
+        raise PostDatabaseError("게시글 수정 중 데이터베이스 오류가 발생했습니다.") from exc
 
 
 def delete_post(post_id: int) -> PostResponse | None:
-    result = (
-        get_supabase()
-        .table("posts")
-        .delete()
-        .eq("post_id", post_id)
-        .execute()
-    )
-    if not result.data:
-        return None
-    return PostResponse.model_validate(result.data[0])
+    try:
+        result = (
+            get_supabase()
+            .table("posts")
+            .delete()
+            .eq("post_id", post_id)
+            .execute()
+        )
+        if not result.data:
+            return None
+        return PostResponse.model_validate(result.data[0])
+    except Exception as exc:
+        logger.exception("delete_post failed for post_id=%s", post_id)
+        raise PostDatabaseError("게시글 삭제 중 데이터베이스 오류가 발생했습니다.") from exc
