@@ -4,7 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from app.core.supabase_client import get_supabase
-from app.schemes.comment_scheme import CommentCreate, CommentResponse, CommentUpdate
+from app.schemas.comment_schema import CommentCreate, CommentResponse, CommentUpdate
 
 
 def _to_comment(data: dict) -> CommentResponse:

@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException, Path, status
 
-from app.schemes.comment_scheme import (
+from app.schemas.comment_schema import (
     CommentCreate,
     CommentDeleteResponse,
     CommentResponse,
