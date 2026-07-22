@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.schemas.chat_schema import ChatRequest, ChatResponse
+from app.schemes.chat_schema import ChatRequest, ChatResponse
 from app.services.chat_service import call_gemini
 from app.core.api_response import ApiResponse
 
