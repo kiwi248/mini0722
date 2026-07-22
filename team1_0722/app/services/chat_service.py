@@ -5,7 +5,7 @@ from google import genai
 
 def call_gemini(chat_request:ChatRequest)->ChatResponse:
     api_key = os.getenv("GEMINI_API_KEY")
-    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+    model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
     client = genai.Client(api_key=api_key)
 
