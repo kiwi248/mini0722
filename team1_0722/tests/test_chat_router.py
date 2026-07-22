@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app.main import app
+from team1_0722.app.ykw import app
 from app.routers import chat_router
 from app.schemas.chat_schema import ChatResponse
 
