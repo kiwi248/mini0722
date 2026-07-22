@@ -20,6 +20,6 @@ sample.txt
 !.vscode/settings.json
 
 # test
-jmlee.py
-aa.py
+sym.py
+main.py
 bb.py
