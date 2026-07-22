@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.core.api_response import ApiResponse
-from app.schemas.user_schema import UserCreate, UserUpdate
+from app.schemes.user_schema import UserCreate, UserUpdate
 from app.services.user_service import (
     DuplicateEmailError,
     UserServiceError,

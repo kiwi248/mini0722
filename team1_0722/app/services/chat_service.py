@@ -1,6 +1,6 @@
 # chat_service.py
 import os
-from app.schemas.chat_schema import ChatRequest, ChatResponse
+from app.schemes.chat_schema import ChatRequest, ChatResponse
 from google import genai
 
 def call_gemini(chat_request:ChatRequest)->ChatResponse:

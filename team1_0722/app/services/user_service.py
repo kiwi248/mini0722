@@ -8,7 +8,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from app.core.supabase_client import get_supabase
-from app.schemas.user_schema import UserCreate, UserPublic, UserUpdate
+from app.schemes.user_schema import UserCreate, UserPublic, UserUpdate
 
 
 class UserServiceError(Exception):
