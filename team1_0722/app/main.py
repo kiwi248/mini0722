@@ -6,7 +6,8 @@ from app.routers.post_router import post_router
 from app.routers.user_router import user_router
 #from app.routers.product_router import product_router
 import app.core.chat_config
-from team1_0722.app.routers import comment_router, support_router
+from app.routers.comment_router import comment_router
+from app.routers.support_router import support_router
 
 logging.basicConfig(level=logging.INFO)
 
