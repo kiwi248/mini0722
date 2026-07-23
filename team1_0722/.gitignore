@@ -22,5 +22,9 @@ sample.txt
 # test
 aa.py
 bb.py
+app/port.py
+tests/test_comment_router.py
+sql/comments_test.sql
+
 sym.py
 main.py
