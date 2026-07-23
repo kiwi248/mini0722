@@ -6,6 +6,7 @@ from app.routers.post_router import post_router
 from app.routers.user_router import user_router
 #from app.routers.product_router import product_router
 import app.core.chat_config
+from team1_0722.app.routers import comment_router, support_router
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,6 +28,10 @@ tags_metadata = [
         "name": "Comment",
         "description": "Supabase에 저장된 댓글을 생성·조회·수정·삭제합니다.",
     },
+    {
+        "name": "Support",
+        "description": "Supabase에 저장된 문의사항을 생성·조회·수정·삭제합니다.",
+    },
 ]
 
 app = FastAPI(title="Main App", openapi_tags=tags_metadata)
@@ -35,3 +40,4 @@ app.include_router(chat_router)
 app.include_router(post_router)
 app.include_router(user_router)
 app.include_router(comment_router)
+app.include_router(support_router)
