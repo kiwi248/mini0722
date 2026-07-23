@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.core.api_response import ApiResponse
-from app.schemas.support_scheme import SupportCreate, SupportUpdate
+from app.schemes.support_scheme import SupportCreate, SupportUpdate
 from app.services.support_service import (
     support_create,
     support_delete,
