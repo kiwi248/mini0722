@@ -2,7 +2,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from app.core.supabase_client import get_supabase
-from app.schemas.support_scheme import (
+from app.schemes.support_scheme import (
     SupportCreate,
     SupportResponse,
     SupportUpdate,
